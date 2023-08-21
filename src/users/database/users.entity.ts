@@ -1,6 +1,6 @@
 import { Auth } from "src/auth/database/auth.entity";
 import { Base } from "src/base/database/base.entity";
-import { BeforeInsert, BeforeUpdate, Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { BeforeInsert, BeforeUpdate, Column, Entity, OneToMany, PrimaryGeneratedColumn, Unique } from "typeorm";
 import * as bcrypt from 'bcrypt'
 
 @Entity()
@@ -11,13 +11,13 @@ export class Users extends Base {
   @Column()
   full_name: string;
 
-  @Column()
+  @Column({ unique: true })
   email: string;
 
   @Column()
   password_hash: string;
 
-  @Column()
+  @Column({ unique: true })
   login_id: string;
 
   @Column({ default: 1 })
