@@ -15,9 +15,13 @@ export class UsersService {
       login_id: signupDto.login_id,
       password_hash: signupDto.password
     })
-    const savedUser = await this.userRepo.save(user)
-    const { full_name, email, login_id, ...rest } = savedUser
-    return { full_name, email, login_id }
+    try {
+      const savedUser = await this.userRepo.save(user)
+      const { full_name, email, login_id, ...rest } = savedUser
+      return { full_name, email, login_id }
+    } catch (error) {
+      return "Username or email is taken"
+    }
   }
 
   //worker function
