@@ -7,20 +7,20 @@ https://mushy-hare-flannel-nightgown.cyclic.cloud/
 
 <strong>Request:</strong>
 
-{
+```{
 	"full_name":"",
 	"email":"",
 	"password":"",
 	"login_id":""
-}
+}```
 
 <Strong>Response:</Strong>
 
-{
+```{
 	"full_name":"",
 	"email":"",
 	"login_id":""
-}
+}```
 
 <hr>
 
@@ -28,18 +28,18 @@ https://mushy-hare-flannel-nightgown.cyclic.cloud/
 
 <strong>Request:</strong>
 
-{
+```{
 	"password":"",
 	"username":""
-}
+}```
 
 <Strong>Response:</Strong>
 
-{
+```{
 	"accessToken": "",
 	"refreshToken": "",
 	"statusCode": \<Number\>
-}
+}```
 
 <hr>
 
@@ -47,16 +47,16 @@ https://mushy-hare-flannel-nightgown.cyclic.cloud/
 
 <strong>Request:</strong>
 
-{
+```{
 "refreshToken":""
-}
+}```
 
 <Strong>Response:</Strong>
 
-{
+```{
 	"accessToken": "",
 	"refreshToken": "",
 	"statusCode": \<Number\>
-}
+}```
 
 <hr>
