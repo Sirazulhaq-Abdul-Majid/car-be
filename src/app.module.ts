@@ -11,8 +11,6 @@ import { Auth } from './auth/database/auth.entity';
 import { Cars } from './cars/database/cars.entity';
 import { AuthModule } from './auth/auth.module';
 import { ConfigModule } from '@nestjs/config';
-import { CarsController } from './cars/cars.controller';
-import { CarsService } from './cars/cars.service';
 import { CarsModule } from './cars/cars.module';
 
 @Module({

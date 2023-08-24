@@ -1,6 +1,6 @@
 import { Auth } from "src/auth/database/auth.entity";
 import { Base } from "src/base/database/base.entity";
-import { BeforeInsert, BeforeUpdate, Column, Entity, OneToMany, PrimaryGeneratedColumn, Unique } from "typeorm";
+import { BeforeInsert, BeforeUpdate, Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import * as bcrypt from 'bcrypt'
 
 @Entity()
