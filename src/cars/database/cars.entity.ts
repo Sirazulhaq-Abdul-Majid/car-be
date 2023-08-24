@@ -1,6 +1,7 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 import { Condition, Transmission } from "../enum";
 import { Base } from "src/base/database/base.entity";
+import { Users } from "src/users/database/users.entity";
 
 @Entity('cars')
 export class Cars extends Base {
@@ -39,4 +40,8 @@ export class Cars extends Base {
 
   @Column({ nullable: true })
   torque: number
+
+  //relations
+  @ManyToOne(() => Users, users => users.cars)
+  users: Users
 }

@@ -2,6 +2,7 @@ import { Auth } from "src/auth/database/auth.entity";
 import { Base } from "src/base/database/base.entity";
 import { BeforeInsert, BeforeUpdate, Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import * as bcrypt from 'bcrypt'
+import { Cars } from "src/cars/database/cars.entity";
 
 @Entity()
 export class Users extends Base {
@@ -35,5 +36,7 @@ export class Users extends Base {
   @OneToMany(() => Auth, auth => auth.users)
   auth: Auth[];
 
+  @OneToMany(() => Cars, cars => cars.users)
+  cars: Cars[]
 
 }
