@@ -1,5 +1,5 @@
 import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
-import { Brands, Condition, Transmission } from "../enum";
+import { Condition, Transmission } from "../enum";
 import { Base } from "src/base/database/base.entity";
 
 @Entity('cars')
@@ -10,11 +10,14 @@ export class Cars extends Base {
   @Column()
   description: string
 
+  @Column({ default: 0 })
+  visit: number
+
   @Column()
   condition: Condition
 
   @Column()
-  brands: Brands
+  brands: string
 
   @Column()
   model: string
@@ -22,7 +25,7 @@ export class Cars extends Base {
   @Column()
   transmission: Transmission
 
-  @Column()
+  @Column({ type: 'longtext' })
   image: string
 
   @Column()
@@ -31,9 +34,9 @@ export class Cars extends Base {
   @Column()
   engine_cc: number
 
-  @Column()
+  @Column({ nullable: true })
   horse_power: number
 
-  @Column()
+  @Column({ nullable: true })
   torque: number
 }
