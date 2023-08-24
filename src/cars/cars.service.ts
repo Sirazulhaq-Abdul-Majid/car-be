@@ -25,6 +25,9 @@ export class CarsService {
         users: user
       })
       this.carsRepo.save(car)
+      return {
+        statusCode: 201
+      }
     } catch (error) {
       console.log(error)
     }

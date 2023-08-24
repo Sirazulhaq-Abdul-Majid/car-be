@@ -65,3 +65,28 @@ https://mushy-hare-flannel-nightgown.cyclic.cloud/
 }
 ```
 <hr>
+
+<code>POST /cars/save</code>
+
+<strong>Request:</strong>
+```json
+{
+	"model":"",
+	"description":"",
+	"condition":"",
+	"brands":"",
+	"transmission":"",
+	"year": \<Number\>,
+	"engine_cc": \<Number\>,
+	"horse_power": \<Number\>,
+	"torque": \<Number\>,
+	"image":"data:image/webp;base64,asdfdsf"
+}
+```
+<Strong>Response:</Strong>
+```json
+{
+	"statusCode": \<Number\>
+}
+```
+<hr>
