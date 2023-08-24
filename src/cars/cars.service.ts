@@ -30,6 +30,9 @@ export class CarsService {
       }
     } catch (error) {
       console.log(error)
+      return {
+        statusCode: 400
+      }
     }
   }
 }
