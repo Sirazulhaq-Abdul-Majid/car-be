@@ -26,7 +26,7 @@ export class Cars extends Base {
   @Column()
   transmission: Transmission
 
-  @Column({ type: 'longtext' })
+  @Column()
   image: string
 
   @Column()

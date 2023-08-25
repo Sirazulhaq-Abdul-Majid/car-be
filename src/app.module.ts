@@ -12,6 +12,8 @@ import { Cars } from './cars/database/cars.entity';
 import { AuthModule } from './auth/auth.module';
 import { ConfigModule } from '@nestjs/config';
 import { CarsModule } from './cars/cars.module';
+import { MulterModule } from '@nestjs/platform-express';
+import { multerConfig } from './base/multer/multer.config';
 
 @Module({
   imports: [
@@ -19,6 +21,7 @@ import { CarsModule } from './cars/cars.module';
       envFilePath: ['.env'],
       isGlobal: true
     }),
+    MulterModule.register(multerConfig),
     TypeOrmModule.forRoot({
       type: process.env.DB_DRIVER as any,
       host: process.env.DB_HOST,
