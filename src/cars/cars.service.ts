@@ -4,12 +4,11 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Cars } from './database/cars.entity';
 import { Repository } from 'typeorm';
 import { UsersService } from 'src/users/users.service';
-import Jimp from 'jimp';
 
 @Injectable()
 export class CarsService {
   constructor(@InjectRepository(Cars) private carsRepo: Repository<Cars>, private userService: UsersService) { }
-  async saveCar(carDto: AddCarDTO, payload: any, paths) {
+  async saveCar(carDto: AddCarDTO, payload: any, paths: any) {
     try {
       const user = await this.userService.findOne(payload.username)
       const imagePath = JSON.stringify(paths)

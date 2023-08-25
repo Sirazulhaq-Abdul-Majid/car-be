@@ -69,6 +69,7 @@ https://mushy-hare-flannel-nightgown.cyclic.cloud/
 <code>POST /cars/save</code>
 
 <strong>Request:</strong>
+Content-Type: multipart/form-data
 ```json
 {
 	"model":"",
@@ -80,7 +81,7 @@ https://mushy-hare-flannel-nightgown.cyclic.cloud/
 	"engine_cc": \<Number\>,
 	"horse_power": \<Number\>,
 	"torque": \<Number\>,
-	"image":"data:image/webp;base64,asdfdsf"
+	"image": \<Image binary\>
 }
 ```
 <Strong>Response:</Strong>

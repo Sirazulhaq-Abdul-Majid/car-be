@@ -1,7 +1,7 @@
 import { Body, Controller, Post, Request, UploadedFile, UploadedFiles, UseGuards, UseInterceptors } from '@nestjs/common';
 import { AddCarDTO } from './dto/add-car.dto';
 import { CarsService } from './cars.service';
-import { FileFieldsInterceptor, FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
+import { FilesInterceptor } from '@nestjs/platform-express';
 import { AccessTokenGuard } from 'src/auth/guard/access-token.guard';
 import { multerConfig } from 'src/base/multer/multer.config';
 
