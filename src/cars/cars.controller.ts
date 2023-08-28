@@ -1,9 +1,9 @@
 import { Body, Controller, Post, Request, UploadedFile, UploadedFiles, UseGuards, UseInterceptors } from '@nestjs/common';
-import { AddCarDTO } from './dto/add-car.dto';
 import { CarsService } from './cars.service';
 import { FilesInterceptor } from '@nestjs/platform-express';
 import { AccessTokenGuard } from 'src/auth/guard/access-token.guard';
 import { multerConfig } from 'src/base/multer/multer.config';
+import { AddCarDTO, SearchCarDTO } from './dto';
 
 
 
@@ -22,9 +22,9 @@ export class CarsController {
     return this.carsService.saveCar(carDto, req.user, paths)
   }
 
-  @Post('image')
-  image(@UploadedFile() file: Express.Multer.File) {
-    console.log(file)
+  @UseGuards(AccessTokenGuard)
+  @Post('search')
+  async search(@Body() carDto: SearchCarDTO) {
+    return this.carsService.searchCar(carDto)
   }
-
 }
