@@ -21,6 +21,5 @@ export class SearchCarDTO {
   torque_start: number
   torque_end: number
 
-  @IsEnum(Condition)
-  condition: Condition
+  condition: string
 }

@@ -3,7 +3,7 @@ https://mushy-hare-flannel-nightgown.cyclic.cloud/
 
 ### Endpoints:
 
-<code>POST /user/signup</code>
+<code>POST /users/signup</code>
 
 <strong>Request:</strong>
 
