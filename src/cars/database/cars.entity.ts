@@ -1,7 +1,8 @@
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { Condition, Transmission } from "../enum";
 import { Base } from "src/base/database/base.entity";
 import { Users } from "src/users/database/users.entity";
+import { Images } from "./images.entity";
 
 @Entity('cars')
 export class Cars extends Base {
@@ -26,10 +27,6 @@ export class Cars extends Base {
   @Column()
   transmission: Transmission
 
-  //remove nullable later
-  @Column({ nullable: true })
-  image: string
-
   @Column()
   year: number
 
@@ -48,4 +45,7 @@ export class Cars extends Base {
   //relations
   @ManyToOne(() => Users, users => users.cars)
   users: Users
+
+  @OneToMany(() => Images, images => images.cars)
+  images: Images[]
 }

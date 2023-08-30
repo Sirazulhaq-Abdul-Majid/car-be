@@ -12,6 +12,7 @@ import { AuthModule } from './auth/auth.module';
 import { ConfigModule } from '@nestjs/config';
 import { CarsModule } from './cars/cars.module';
 import { MulterModule } from '@nestjs/platform-express';
+import { Images } from './cars/database/images.entity';
 
 @Module({
   imports: [
@@ -27,7 +28,7 @@ import { MulterModule } from '@nestjs/platform-express';
       username: process.env.DB_USERNAME,
       password: process.env.DB_PASSWORD,
       database: process.env.DB_NAME,
-      entities: [Users, Auth, Cars],
+      entities: [Users, Auth, Cars, Images],
       synchronize: true,
     }),
     BaseModule, UsersModule, AuthModule, CarsModule],

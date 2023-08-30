@@ -2,20 +2,27 @@ import { Injectable } from '@nestjs/common';
 import { AddCarDTO } from './dto/add-car.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Cars } from './database/cars.entity';
-import { Repository } from 'typeorm';
+import { Repository, getRepository } from 'typeorm';
 import { UsersService } from 'src/users/users.service';
 import { SearchCarDTO } from './dto';
 import { join } from 'path';
 import * as fs from 'fs'
+import { Images } from './database/images.entity';
+import { Users } from 'src/users/database/users.entity';
 
 @Injectable()
 export class CarsService {
-  constructor(@InjectRepository(Cars) private carsRepo: Repository<Cars>, private userService: UsersService) { }
+  constructor(@InjectRepository(Cars) private carsRepo: Repository<Cars>, private userService: UsersService, @InjectRepository(Images) private imageRepo: Repository<Images>) { }
 
-  async saveCar(carDto: AddCarDTO, payload: any, paths: any) {
+  async saveCar(carDto: AddCarDTO, payload: any, files: Array<Express.Multer.File>) {
     try {
       const user = await this.userService.findOne(payload.username)
-      const imagePath = JSON.stringify(paths)
+      const imagesEntity = []
+      files.forEach((file) => {
+        const image = this.imageRepo.create({
+
+        })
+      })
       const car = this.carsRepo.create({
         description: carDto.description,
         condition: carDto.condition,
@@ -28,9 +35,15 @@ export class CarsService {
         torque: carDto.torque,
         users: user,
         rating: Number(carDto.rating),
-        image: imagePath
       })
-      this.carsRepo.save(car)
+      const savedCar = await this.carsRepo.save(car)
+      files.forEach(async (file) => {
+        const image = this.imageRepo.create({
+          image: file.buffer,
+          cars: savedCar
+        })
+        await this.imageRepo.save(image)
+      })
       return {
         statusCode: 201
       }
@@ -43,7 +56,7 @@ export class CarsService {
   }
 
   async searchCar(carDto: SearchCarDTO) {
-    const queryBuilder = this.carsRepo.createQueryBuilder("cars")
+    const queryBuilder = this.carsRepo.createQueryBuilder("cars").leftJoinAndSelect('cars.image', 'image')
     const query = this.generateQuery(queryBuilder, carDto)
     try {
       const cars = await query.getMany()
@@ -55,22 +68,20 @@ export class CarsService {
 
   async sendOne(id: number) {
     try {
-      const car = await this.carsRepo.findOne({ where: { id } })
+      const car = await this.carsRepo.findOne({ where: { id }, relations: ['images'] })
       console.log(car)
-      var images = []
-      const imagePaths = JSON.parse(car.image)
-      imagePaths.forEach((path: any) => {
-        const imagePath = join(path)
-        const imageBuffer = fs.readFileSync(imagePath)
-        const base64Image = imageBuffer.toString('base64')
-        images.push(base64Image)
+      var base64Images = []
+      car.images.forEach((image) => {
+        const base64Image = image.image.toString('base64')
+        base64Images.push(base64Image)
       })
-      delete car.image
-      return { car, image: images }
+      delete car.images
+      return { car, images: base64Images }
     } catch (error) {
       console.log(error)
     }
   }
+
 
   //worker functions
   generateQuery(query: any, carDto: SearchCarDTO) {

@@ -3,6 +3,7 @@ import { Condition, Transmission } from "../enum"
 import { Escape } from "class-sanitizer"
 import { Transform, TransformFnParams } from "class-transformer"
 import * as sanitizeHtml from 'sanitize-html'
+import { ApiProperty } from "@nestjs/swagger"
 
 export class AddCarDTO {
   @IsString()
@@ -35,7 +36,7 @@ export class AddCarDTO {
   @Transform((params: TransformFnParams) => sanitizeHtml(params.value))
   transmission: Transmission
 
-  image: string
+  image: any
 
   @IsNotEmpty()
   @Escape()
