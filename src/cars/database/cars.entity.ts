@@ -26,6 +26,7 @@ export class Cars extends Base {
   @Column()
   transmission: Transmission
 
+  //remove nullable later
   @Column({ nullable: true })
   image: string
 

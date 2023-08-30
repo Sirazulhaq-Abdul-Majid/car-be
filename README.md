@@ -51,6 +51,7 @@ https://mushy-hare-flannel-nightgown.cyclic.cloud/
 <code>POST /auth/refresh</code>
 
 <strong>Request:</strong>
+AccessToken
 ```json
 {
 "refreshToken":""
@@ -70,6 +71,7 @@ https://mushy-hare-flannel-nightgown.cyclic.cloud/
 
 <strong>Request:</strong>
 Content-Type: multipart/form-data
+AccessToken
 ```json
 {
 	"model":"",
