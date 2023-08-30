@@ -1,7 +1,6 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { UsersController } from './users/users.controller';
 import { UsersModule } from './users/users.module';
 import { UsersService } from './users/users.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
@@ -13,7 +12,6 @@ import { AuthModule } from './auth/auth.module';
 import { ConfigModule } from '@nestjs/config';
 import { CarsModule } from './cars/cars.module';
 import { MulterModule } from '@nestjs/platform-express';
-import { multerConfig } from './base/multer/multer.config';
 
 @Module({
   imports: [
@@ -21,7 +19,7 @@ import { multerConfig } from './base/multer/multer.config';
       envFilePath: ['.env'],
       isGlobal: true
     }),
-    MulterModule.register({limits:{fileSize:1024*1024}}),
+    MulterModule.register({ limits: { fileSize: 1024 * 1024 } }),
     TypeOrmModule.forRoot({
       type: process.env.DB_DRIVER as any,
       host: process.env.DB_HOST,
