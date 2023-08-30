@@ -21,7 +21,7 @@ import { multerConfig } from './base/multer/multer.config';
       envFilePath: ['.env'],
       isGlobal: true
     }),
-    MulterModule.register(multerConfig),
+    MulterModule.register({limits:{fileSize:1024*1024}}),
     TypeOrmModule.forRoot({
       type: process.env.DB_DRIVER as any,
       host: process.env.DB_HOST,

@@ -1,4 +1,4 @@
-import { Body, Controller, Post, Request, UploadedFile, UploadedFiles, UseGuards, UseInterceptors } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Request, Res, UploadedFile, UploadedFiles, UseGuards, UseInterceptors } from '@nestjs/common';
 import { CarsService } from './cars.service';
 import { FilesInterceptor } from '@nestjs/platform-express';
 import { AccessTokenGuard } from 'src/auth/guard/access-token.guard';
@@ -22,9 +22,14 @@ export class CarsController {
     return this.carsService.saveCar(carDto, req.user, paths)
   }
 
-  @UseGuards(AccessTokenGuard)
   @Post('search')
   async search(@Body() carDto: SearchCarDTO) {
     return this.carsService.searchCar(carDto)
   }
+
+  @Get(':id')
+  async oneCar(@Param('id') id: number) {
+    return this.carsService.sendOne(id)
+  }
+
 }

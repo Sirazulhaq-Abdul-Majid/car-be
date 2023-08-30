@@ -2,9 +2,11 @@ import { Injectable } from '@nestjs/common';
 import { AddCarDTO } from './dto/add-car.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Cars } from './database/cars.entity';
-import { QueryBuilder, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
 import { UsersService } from 'src/users/users.service';
 import { SearchCarDTO } from './dto';
+import { join } from 'path';
+import * as fs from 'fs'
 
 @Injectable()
 export class CarsService {
@@ -21,10 +23,11 @@ export class CarsService {
         model: carDto.model,
         transmission: carDto.transmission,
         year: carDto.year,
-        engine_cc: carDto.engine_cc,
+        engine_cc: Number(carDto.engine_cc),
         horse_power: carDto.horse_power,
         torque: carDto.torque,
         users: user,
+        rating: Number(carDto.rating),
         image: imagePath
       })
       this.carsRepo.save(car)
@@ -42,7 +45,30 @@ export class CarsService {
   async searchCar(carDto: SearchCarDTO) {
     const queryBuilder = this.carsRepo.createQueryBuilder("cars")
     const query = this.generateQuery(queryBuilder, carDto)
-    return await query.getMany()
+    try {
+      const cars = await query.getMany()
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  async sendOne(id: number) {
+    try {
+      const car = await this.carsRepo.findOne({ where: { id } })
+      console.log(car)
+      var images = []
+      const imagePaths = JSON.parse(car.image)
+      imagePaths.forEach((path: any) => {
+        const imagePath = join(path)
+        const imageBuffer = fs.readFileSync(imagePath)
+        const base64Image = imageBuffer.toString('base64')
+        images.push(base64Image)
+      })
+      delete car.image
+      return { car, image: images }
+    } catch (error) {
+      console.log(error)
+    }
   }
 
   //worker functions

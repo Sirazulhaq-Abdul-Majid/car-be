@@ -3,7 +3,12 @@ dist/
 coverage/
 node_modules/
 *.jpg
+*.JPG
 *.jpeg
+*.JPEG
 *.png
+*.PNG
 *.gif
+*.GIF
 *.webp
+*.WEBP

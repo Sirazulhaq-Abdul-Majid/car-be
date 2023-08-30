@@ -35,6 +35,9 @@ export class Cars extends Base {
   @Column()
   engine_cc: number
 
+  @Column()
+  rating: number
+
   @Column({ nullable: true })
   horse_power: number
 

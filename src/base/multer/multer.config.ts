@@ -12,4 +12,6 @@ export const multerConfig = {
       cb(null, file.fieldname + '-' + uniqueSuffix + fileExt);
     },
   }),
+  limits: { fileSize: 1024 * 1024 }
 };
+
