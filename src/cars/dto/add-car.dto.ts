@@ -1,4 +1,4 @@
-import { IsInt, IsNotEmpty, IsNumber, IsNumberString, IsString, Max, Min } from "class-validator"
+import { IsNotEmpty, IsNumberString, IsString, } from "class-validator"
 import { Condition, Transmission } from "../enum"
 import { Escape } from "class-sanitizer"
 import { Transform, TransformFnParams } from "class-transformer"

@@ -47,6 +47,7 @@ export class CarsService {
     const query = this.generateQuery(queryBuilder, carDto)
     try {
       const cars = await query.getMany()
+      return cars
     } catch (error) {
       console.log(error)
     }
