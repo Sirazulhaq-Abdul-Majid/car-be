@@ -1,6 +1,6 @@
 import { Body, Controller, Get, Param, Post, Request, UploadedFiles, UseGuards, UseInterceptors } from '@nestjs/common';
 import { CarsService } from './cars.service';
-import { FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
+import { FilesInterceptor } from '@nestjs/platform-express';
 import { AccessTokenGuard } from 'src/auth/guard/access-token.guard';
 import { multerConfig } from 'src/base/multer/multer.config';
 import { AddCarDTO, SearchCarDTO } from './dto';
@@ -27,12 +27,5 @@ export class CarsController {
   async oneCar(@Param('id') id: number) {
     return this.carsService.sendOne(id)
   }
-
-  // @Post('test')
-  // @UseInterceptors(FilesInterceptor('image'))
-  // async test(@Body() carDto: AddCarDTO, @UploadedFiles() file: Express.Multer.File) {
-  //   console.log(file[0].buffer)
-  //   this.carsService.saveCar(carDto, file)
-  // }
 
 }

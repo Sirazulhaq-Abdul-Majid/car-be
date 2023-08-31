@@ -2,13 +2,10 @@ import { Injectable } from '@nestjs/common';
 import { AddCarDTO } from './dto/add-car.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Cars } from './database/cars.entity';
-import { Repository, getRepository } from 'typeorm';
+import { Repository } from 'typeorm';
 import { UsersService } from 'src/users/users.service';
 import { SearchCarDTO } from './dto';
-import { join } from 'path';
-import * as fs from 'fs'
 import { Images } from './database/images.entity';
-import { Users } from 'src/users/database/users.entity';
 
 @Injectable()
 export class CarsService {
@@ -17,12 +14,6 @@ export class CarsService {
   async saveCar(carDto: AddCarDTO, payload: any, files: Array<Express.Multer.File>) {
     try {
       const user = await this.userService.findOne(payload.username)
-      const imagesEntity = []
-      files.forEach((file) => {
-        const image = this.imageRepo.create({
-
-        })
-      })
       const car = this.carsRepo.create({
         description: carDto.description,
         condition: carDto.condition,
