@@ -11,7 +11,6 @@ import { AddCarDTO, SearchCarDTO } from './dto';
 export class CarsController {
   constructor(private carsService: CarsService) { }
 
-  @UseGuards(AccessTokenGuard)
   @Post('save')
   @UseInterceptors(FilesInterceptor('image', 20, multerConfig))
   async addCar(@Body() carDto: AddCarDTO, @Request() req: any, @UploadedFiles() files: Array<Express.Multer.File>) {
