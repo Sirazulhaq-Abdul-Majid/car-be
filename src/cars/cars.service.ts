@@ -13,7 +13,7 @@ export class CarsService {
 
   async saveCar(carDto: AddCarDTO, payload: any, files: Array<Express.Multer.File>) {
     try {
-      const user = await this.userService.findOne('aieman')
+      const user = await this.userService.findOne(payload.username)
       const car = this.carsRepo.create({
         description: carDto.description,
         condition: carDto.condition,

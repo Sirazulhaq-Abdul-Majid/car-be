@@ -33,7 +33,7 @@ export class Cars extends Base {
   @Column()
   engine_cc: number
 
-  @Column()
+  @Column({ default: 0 })
   rating: number
 
   @Column({ nullable: true })
