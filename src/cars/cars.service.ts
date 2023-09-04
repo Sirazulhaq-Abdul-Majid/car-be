@@ -60,7 +60,6 @@ export class CarsService {
   async sendOne(id: number) {
     try {
       const car = await this.carsRepo.findOne({ where: { id }, relations: ['images'] })
-      console.log(car)
       var base64Images = []
       car.images.forEach((image) => {
         const base64Image = image.image.toString('base64')
@@ -68,6 +67,16 @@ export class CarsService {
       })
       delete car.images
       return { car, images: base64Images }
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  async getAll() {
+    try {
+      const query = this.carsRepo.createQueryBuilder('cars')
+      const cars = query.orderBy('cars.rating', 'DESC').take(20).getMany()
+      return cars
     } catch (error) {
       console.log(error)
     }
