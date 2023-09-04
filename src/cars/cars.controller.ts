@@ -18,7 +18,6 @@ export class CarsController {
     return this.carsService.saveCar(carDto, req.user, files)
   }
 
-  @UseGuards(AccessTokenGuard)
   @Get()
   async getAllCars() {
     return this.carsService.getAll()

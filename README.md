@@ -93,3 +93,139 @@ AccessToken
 }
 ```
 <hr>
+
+<code>POST /cars/search</code>
+
+<strong>Request:</strong>
+```json
+{
+  brands: "",
+  model:  "",
+  transmission: Transmission,
+  year_start:  \<Number\>,
+  year_end:  \<Number\>,
+  engine_cc_start:  \<Number\>,
+  engine_cc_end:  \<Number\>,
+  horse_power_start:  \<Number\>,
+  horse_power_end:  \<Number\>,
+  torque_start:  \<Number\>,
+  torque_end:  \<Number\>,
+  condition: Condition
+}
+```
+<Strong>Response:</Strong>
+```json
+
+[
+	[
+		{
+			"createdDate": "",
+			"updatedDate": "",
+			"deleteDate": null,
+			"id":  \<Number\>,
+			"description": "",
+			"visit":  \<Number\>,
+			"condition": "",
+			"brands": "",
+			"model": "",
+			"transmission": "",
+			"year":  \<Number\>,
+			"engine_cc":  \<Number\>,
+			"rating":  \<Number\>,
+			"horse_power":  \<Number\>,
+			"torque":  \<Number\>,
+			"images": [
+				{
+					"image": {
+						"type": "Buffer",
+						"data": [
+							<image>,
+							<image>
+							]
+						}
+				}
+			]
+		}
+	]
+]
+
+```
+<hr>
+
+<code>GET /cars/<strong><id></strong></code>
+
+<strong>Request:</strong>
+```json
+
+```
+<Strong>Response:</Strong>
+```json
+
+{
+	"car": {
+		"createdDate": "",
+		"updatedDate": "",
+		"deleteDate": null,
+		"id":  \<Number\>,
+		"description": "",
+		"visit":  \<Number\>,
+		"condition": "",
+		"brands": "",
+		"model": "",
+		"transmission": "",
+		"year":  \<Number\>,
+		"engine_cc":  \<Number\>,
+		"rating":  \<Number\>,
+		"horse_power":  \<Number\>,
+		"torque":  \<Number\>,
+	},
+	"images": [
+		"",
+		""
+	]
+}
+
+```
+<hr>
+
+<code>GET /cars/ </code>
+
+<strong>Request:</strong>
+```json
+
+```
+<Strong>Response:</Strong>
+```json
+
+[
+	{
+		"createdDate": "",
+		"updatedDate": "",
+		"deleteDate": null,
+		"id":  \<Number\>,
+		"description": "",
+		"visit":  \<Number\>,
+		"condition": "",
+		"brands": "",
+		"model": "",
+		"transmission": "",
+		"year":  \<Number\>,
+		"engine_cc":  \<Number\>,
+		"rating":  \<Number\>,
+		"horse_power":  \<Number\>,
+		"torque":  \<Number\>,
+		"images": [
+			{
+				"image": {
+					"type": "Buffer",
+					"data": [
+						<image>,
+						<image>
+					]
+				}
+			}
+		]
+	},
+
+```
+<hr>

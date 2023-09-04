@@ -47,7 +47,7 @@ export class CarsService {
   }
 
   async searchCar(carDto: SearchCarDTO) {
-    const queryBuilder = this.carsRepo.createQueryBuilder("cars").leftJoinAndSelect('cars.image', 'image')
+    const queryBuilder = this.carsRepo.createQueryBuilder("cars").leftJoinAndSelect('cars.images', 'images').select(['cars', 'images.image'])
     const query = this.generateQuery(queryBuilder, carDto)
     try {
       const cars = await query.getMany()
@@ -74,8 +74,11 @@ export class CarsService {
 
   async getAll() {
     try {
-      const query = this.carsRepo.createQueryBuilder('cars')
-      const cars = query.orderBy('cars.rating', 'DESC').take(20).getMany()
+      const query = this.carsRepo.createQueryBuilder('cars').leftJoinAndSelect('cars.images', 'images').select(['cars', 'images.image'])
+      const cars = query
+        .orderBy('cars.rating', 'DESC')
+        .take(20)
+        .getMany()
       return cars
     } catch (error) {
       console.log(error)
