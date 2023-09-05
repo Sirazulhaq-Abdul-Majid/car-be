@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { AddCarDTO } from './dto/add-car.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Cars } from './database/cars.entity';
@@ -75,16 +75,66 @@ export class CarsService {
   async getAll() {
     try {
       const query = this.carsRepo.createQueryBuilder('cars').leftJoinAndSelect('cars.images', 'images').select(['cars', 'images.image'])
-      const cars = query
+      const cars = await query
         .orderBy('cars.rating', 'DESC')
         .take(20)
         .getMany()
-      return cars
+      var carsImage = []
+      cars.forEach((car) => {
+        var base64Images = []
+        car.images.forEach((image) => {
+          const base64Image = image.image.toString('base64')
+          base64Images.push(base64Image)
+        })
+        delete car.images
+        carsImage.push({
+          car,
+          images: base64Images
+        })
+      })
+      return carsImage
     } catch (error) {
       console.log(error)
     }
   }
 
+  async addReview(id: number, payload: any) {
+    try {
+      const car = await this.carsRepo.findOne({ where: { id }, relations: ['reviewers'] })
+      const user = await this.userService.findOneReview(payload.id)
+      if (!car) {
+        throw new NotFoundException(`Car with id:${id} not found`)
+      }
+      if (!user) {
+        throw new UnauthorizedException()
+      }
+      var exists = false
+      var i = 0
+      var index = 0
+      user.review.forEach((r) => {
+        if (r.id === car.id) {
+          exists = true
+          index = i
+        }
+        i++
+      })
+      if (!exists) {
+        //add car to like list
+        user.review.push(car)
+        await this.userService.save(user)
+      } else {
+        //remove car from like list
+        user.review.splice(index, index)
+        await this.userService.save(user)
+      }
+      return {
+        statusCode: 201,
+        reviewNumber: this.lengthOf(user.review)
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  }
 
   //worker functions
   generateQuery(query: any, carDto: SearchCarDTO) {
@@ -125,5 +175,15 @@ export class CarsService {
       query.andWhere("cars.torque >= :endTorque", { endTorque: carDto.torque_end })
     }
     return query
+  }
+
+  lengthOf(payload: any) {
+    var i = 0
+    var length = 0
+    while (payload[i]) {
+      length++
+      i++
+    }
+    return length
   }
 }

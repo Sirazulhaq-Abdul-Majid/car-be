@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Users } from './database/users.entity';
 import { Repository } from 'typeorm';
@@ -26,11 +26,35 @@ export class UsersService {
 
   //worker function
   async findOne(username: string) {
-    const user = await this.userRepo.findOneBy({ login_id: username })
-    if (user) {
+    try {
+      const user = await this.userRepo.findOneBy({ login_id: username })
+      if (user) {
+        return user
+      } else {
+        return null
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  async save(user: Users) {
+    try {
+      await this.userRepo.save(user)
+    } catch (error) {
+      return error
+    }
+  }
+
+  async findOneReview(id: number) {
+    try {
+      const user = await this.userRepo.findOne({ where: { id }, relations: ['review'] })
+      if (!user) {
+        throw new NotFoundException()
+      }
       return user
-    } else {
-      return null
+    } catch (error) {
+      console.log(error)
     }
   }
 }

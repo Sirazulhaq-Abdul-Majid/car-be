@@ -82,7 +82,7 @@ AccessToken
 	"year": \<Number\>,
 	"engine_cc": \<Number\>,
 	"horse_power": \<Number\>,
-	"torque": \<Number\>,
+	"torque":\<Number\>,
 	"image": \<Image binary\>
 }
 ```
@@ -199,33 +199,42 @@ AccessToken
 
 [
 	{
-		"createdDate": "",
-		"updatedDate": "",
-		"deleteDate": null,
-		"id":  \<Number\>,
-		"description": "",
-		"visit":  \<Number\>,
-		"condition": "",
-		"brands": "",
-		"model": "",
-		"transmission": "",
-		"year":  \<Number\>,
-		"engine_cc":  \<Number\>,
-		"rating":  \<Number\>,
-		"horse_power":  \<Number\>,
-		"torque":  \<Number\>,
+		"car": {
+			"createdDate": "",
+			"updatedDate": "",
+			"deleteDate": null,
+			"id":  \<Number\>,
+			"description": "",
+			"visit":  \<Number\>,
+			"condition": "",
+			"brands": "",
+			"model": "",
+			"transmission": "",
+			"year":  \<Number\>,
+			"engine_cc":  \<Number\>,
+			"rating":  \<Number\>,
+			"horse_power":  \<Number\>,
+			"torque":  \<Number\>,
+		},
 		"images": [
-			{
-				"image": {
-					"type": "Buffer",
-					"data": [
-						<image>,
-						<image>
-					]
-				}
-			}
+			"base64string"
 		]
 	},
+]
+```
+<hr>
 
+<code>GET /cars/rating/<strong>:id</strong></code>
+
+<strong>Request:</strong>
+AccessToken
+```json
+```
+<Strong>Response:</Strong>
+```json
+{
+	"statusCode": \<Number\>,
+	""
+}
 ```
 <hr>

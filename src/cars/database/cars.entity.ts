@@ -1,4 +1,4 @@
-import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, ManyToMany, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { Condition, Transmission } from "../enum";
 import { Base } from "src/base/database/base.entity";
 import { Users } from "src/users/database/users.entity";
@@ -48,4 +48,7 @@ export class Cars extends Base {
 
   @OneToMany(() => Images, images => images.cars)
   images: Images[]
+
+  @ManyToMany(() => Users, users => users.review)
+  reviewers: Users
 }

@@ -15,7 +15,7 @@ export class CarsController {
   @Post('save')
   @UseInterceptors(FilesInterceptor('image', 20, multerConfig))
   async addCar(@Body() carDto: AddCarDTO, @Request() req: any, @UploadedFiles() files: Array<Express.Multer.File>) {
-    return this.carsService.saveCar(carDto, req.user, files)
+    return await this.carsService.saveCar(carDto, req.user, files)
   }
 
   @Get()
@@ -31,6 +31,12 @@ export class CarsController {
   @Get(':id')
   async oneCar(@Param('id') id: number) {
     return this.carsService.sendOne(id)
+  }
+
+  @UseGuards(AccessTokenGuard)
+  @Get('/rating/:id')
+  async addReview(@Param('id') id: number, @Request() req: any) {
+    return await this.carsService.addReview(id, req.user)
   }
 
 }

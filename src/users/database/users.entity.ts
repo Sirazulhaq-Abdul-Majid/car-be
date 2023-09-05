@@ -1,6 +1,6 @@
 import { Auth } from "src/auth/database/auth.entity";
 import { Base } from "src/base/database/base.entity";
-import { BeforeInsert, BeforeUpdate, Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { BeforeInsert, BeforeUpdate, Column, Entity, JoinColumn, JoinTable, ManyToMany, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import * as bcrypt from 'bcrypt'
 import { Cars } from "src/cars/database/cars.entity";
 
@@ -38,5 +38,13 @@ export class Users extends Base {
 
   @OneToMany(() => Cars, cars => cars.users)
   cars: Cars[]
+
+  @ManyToMany(() => Cars, cars => cars.reviewers)
+  @JoinTable({
+    name: 'user_review',
+    joinColumn: { name: 'users_id', referencedColumnName: 'id' },
+    inverseJoinColumn: { name: 'cars_id', referencedColumnName: 'id' }
+  })
+  review: Cars[]
 
 }
