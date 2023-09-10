@@ -35,6 +35,21 @@ export class AuthService {
     }
   }
 
+  async logout(payload: any) {
+    const refreshTokens = await this.authRepo.find({ where: { users: { login_id: payload.username } } })
+    try {
+      refreshTokens.forEach(async rt => {
+        this.authRepo.delete(rt.id)
+      })
+      return {
+        statusCode: 200
+      }
+    } catch (error) {
+      console.log(error)
+    }
+
+  }
+
   async validateUser(username: string, password: string) {
     const user = await this.userService.findOne(username)
     if (!user) {

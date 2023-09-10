@@ -12,7 +12,9 @@ https://mushy-hare-flannel-nightgown.cyclic.cloud/
 	"full_name":"",
 	"email":"",
 	"password":"",
-	"login_id":""
+	"login_id":"",
+	"state":"",
+	"city":""
 }
 ```
 

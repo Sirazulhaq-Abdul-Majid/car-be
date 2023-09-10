@@ -15,6 +15,12 @@ export class AuthController {
   }
 
   @UseGuards(AccessTokenGuard)
+  @Get('logout')
+  async logout(@Request() req: any) {
+    return this.authService.logout(req.user)
+  }
+
+  @UseGuards(AccessTokenGuard)
   @Post('refresh')
   async refresh(@Request() req: any, @Body() rt: RefreshDTO) {
     return await this.authService.refresh(req.user, rt.refreshToken)
