@@ -32,12 +32,12 @@ export class SignupDTO {
   @IsNotEmpty()
   @Escape()
   @Transform((params: TransformFnParams) => sanitizeHtml(params.value))
-  @IsAlpha()
+  @IsString()
   state: string
 
   @IsNotEmpty()
   @Escape()
   @Transform((params: TransformFnParams) => sanitizeHtml(params.value))
-  @IsAlpha()
+  @IsString()
   city: string
 }
