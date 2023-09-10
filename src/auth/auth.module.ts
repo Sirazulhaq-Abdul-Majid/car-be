@@ -13,6 +13,7 @@ import { Auth } from './database/auth.entity';
 @Module({
   imports: [UsersModule, PassportModule, JwtModule.register({}), TypeOrmModule.forFeature([Auth])],
   providers: [AuthService, LocalStrategy, JwtATStrategy, JwtRTStrategy],
-  controllers: [AuthController]
+  controllers: [AuthController],
+  exports: [AuthService]
 })
 export class AuthModule { }

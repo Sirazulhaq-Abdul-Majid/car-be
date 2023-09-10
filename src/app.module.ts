@@ -13,6 +13,8 @@ import { ConfigModule } from '@nestjs/config';
 import { CarsModule } from './cars/cars.module';
 import { MulterModule } from '@nestjs/platform-express';
 import { Images } from './cars/database/images.entity';
+import { ChatsModule } from './chats/chats.module';
+import { Chats } from './chats/database/chat.entity';
 
 @Module({
   imports: [
@@ -28,10 +30,12 @@ import { Images } from './cars/database/images.entity';
       username: process.env.DB_USERNAME,
       password: process.env.DB_PASSWORD,
       database: process.env.DB_NAME,
-      entities: [Users, Auth, Cars, Images],
+      entities: [
+        Users, Auth, Cars, Images, Chats
+      ],
       synchronize: true,
     }),
-    BaseModule, UsersModule, AuthModule, CarsModule],
+    BaseModule, UsersModule, AuthModule, CarsModule, ChatsModule],
   controllers: [AppController],
   providers: [AppService, UsersService],
 })

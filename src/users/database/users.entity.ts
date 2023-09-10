@@ -3,6 +3,7 @@ import { Base } from "src/base/database/base.entity";
 import { BeforeInsert, BeforeUpdate, Column, Entity, JoinColumn, JoinTable, ManyToMany, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import * as bcrypt from 'bcrypt'
 import { Cars } from "src/cars/database/cars.entity";
+import { Chats } from "src/chats/database/chat.entity";
 
 @Entity()
 export class Users extends Base {
@@ -24,6 +25,12 @@ export class Users extends Base {
   @Column({ default: 1 })
   role: number
 
+  @Column()
+  state: string;
+
+  @Column()
+  city: string;
+
   //Password hashing
   @BeforeInsert()
   @BeforeUpdate()
@@ -39,6 +46,12 @@ export class Users extends Base {
   @OneToMany(() => Cars, cars => cars.users)
   cars: Cars[]
 
+  @OneToMany(() => Chats, chats => chats.user)
+  chat: Chats[]
+
+  @OneToMany(() => Chats, chats => chats.receipient)
+  received_text: Chats[]
+
   @ManyToMany(() => Cars, cars => cars.reviewers)
   @JoinTable({
     name: 'user_review',
@@ -46,5 +59,6 @@ export class Users extends Base {
     inverseJoinColumn: { name: 'cars_id', referencedColumnName: 'id' }
   })
   review: Cars[]
+
 
 }

@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { AddCarDTO } from './dto/add-car.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Cars } from './database/cars.entity';
@@ -40,9 +40,7 @@ export class CarsService {
       }
     } catch (error) {
       console.log(error)
-      return {
-        statusCode: 400
-      }
+      throw new BadRequestException()
     }
   }
 
@@ -54,6 +52,7 @@ export class CarsService {
       return cars
     } catch (error) {
       console.log(error)
+      throw new BadRequestException()
     }
   }
 
@@ -69,6 +68,7 @@ export class CarsService {
       return { car, images: base64Images }
     } catch (error) {
       console.log(error)
+      throw new BadRequestException()
     }
   }
 
@@ -95,6 +95,7 @@ export class CarsService {
       return carsImage
     } catch (error) {
       console.log(error)
+      throw new BadRequestException()
     }
   }
 
@@ -133,10 +134,24 @@ export class CarsService {
       }
     } catch (error) {
       console.log(error)
+      throw new BadRequestException()
     }
   }
 
   //worker functions
+  async findOne(id: number) {
+    try {
+      const car = await this.carsRepo.findOne({ where: { id }, relations: ['users'] })
+      if (!car) {
+        throw new BadRequestException
+      }
+      delete car.users.password_hash
+      return car
+    } catch (error) {
+      throw new BadRequestException()
+    }
+  }
+
   generateQuery(query: any, carDto: SearchCarDTO) {
     if (carDto.brands) {
       query.where("cars.brands LIKE :brand", { brand: carDto.brands })

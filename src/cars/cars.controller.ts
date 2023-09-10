@@ -15,6 +15,9 @@ export class CarsController {
   @Post('save')
   @UseInterceptors(FilesInterceptor('image', 20, multerConfig))
   async addCar(@Body() carDto: AddCarDTO, @Request() req: any, @UploadedFiles() files: Array<Express.Multer.File>) {
+    if (files) {
+      console.log(files)
+    }
     return await this.carsService.saveCar(carDto, req.user, files)
   }
 

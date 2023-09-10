@@ -5,6 +5,7 @@ import { UsersService } from 'src/users/users.service';
 import { Auth } from './database/auth.entity';
 import { Repository } from 'typeorm';
 import * as bcrypt from 'bcrypt'
+import * as jwt from 'jsonwebtoken'
 
 @Injectable()
 export class AuthService {
@@ -74,6 +75,23 @@ export class AuthService {
     return { accessToken, refreshToken, statusCode: 200 }
   }
 
+  async validateAccessToken(token: string) {
+    try {
+      const decode = jwt.verify(token, "wk1JDuH4OsKWLHVXam9vfvUC5bZf974zEeHXmxSOGYAOU2AJCQVIj8B0ZeoGMPi8ylAc5jpKb85HdOzQ5rM6gdqdUl4ZGWXUPl3SvuLoLn4WU0iV3J3")
+      if (!decode) {
+        return false
+      }
+      const user = await this.userService.findOneById(Number(decode.sub))
+      if (!user) {
+        return false
+      }
+      delete user.password_hash
+      return user
+    } catch (error) {
+      console.log(error)
+      throw new UnauthorizedException('token invalid')
+    }
+  }
 
   //worker functions
   async signJWT(payload: any) {

@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Users } from './database/users.entity';
 import { Repository } from 'typeorm';
@@ -13,21 +13,26 @@ export class UsersService {
       full_name: signupDto.full_name,
       email: signupDto.email,
       login_id: signupDto.login_id,
-      password_hash: signupDto.password
+      password_hash: signupDto.password,
+      state: signupDto.state,
+      city: signupDto.city
     })
     try {
       const savedUser = await this.userRepo.save(user)
       const { full_name, email, login_id, ...rest } = savedUser
       return { full_name, email, login_id }
     } catch (error) {
-      return "Username or email is taken"
+      throw new BadRequestException("Username or email is taken")
     }
   }
 
   //worker function
   async findOne(username: string) {
     try {
-      const user = await this.userRepo.findOneBy({ login_id: username })
+      if (!username) {
+        return null
+      }
+      const user = await this.userRepo.findOne({ where: { login_id: username } })
       if (user) {
         return user
       } else {
@@ -35,6 +40,21 @@ export class UsersService {
       }
     } catch (error) {
       console.log(error)
+      throw new BadRequestException()
+    }
+  }
+
+  async findOneById(id: number) {
+    try {
+      const user = await this.userRepo.findOneBy({ id })
+      if (user) {
+        return user
+      } else {
+        return null
+      }
+    } catch (error) {
+      console.log(error)
+      throw new BadRequestException()
     }
   }
 
@@ -42,7 +62,8 @@ export class UsersService {
     try {
       await this.userRepo.save(user)
     } catch (error) {
-      return error
+      console.log(error)
+      throw new BadRequestException()
     }
   }
 
