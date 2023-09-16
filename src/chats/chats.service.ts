@@ -44,7 +44,7 @@ export class ChatsService {
 
   async findAll(payload: any) {
     const user = await this.usersService.findOne(payload.login_id)
-    const chats = await this.chatsRepo.find({ where: [{ user: { id: user.id } }, { receipient: { id: user.id } }], relations: ['receipient', 'user'] })
+    const chats = await this.chatsRepo.find({ where: { user: { id: user.id } }, relations: ['receipient', 'user'] })
     var participants = []
     chats.forEach((chat) => {
       delete chat.receipient.hashPassword
