@@ -42,14 +42,12 @@ export class ChatsGateway implements OnModuleInit, OnGatewayDisconnect {
   async join(@Request() req: any, @ConnectedSocket() client: Socket) {
     const { user, statusCode } = await this.chatsService.join(req.user)
     this.bucket[user.login_id] = client.id
-    console.log(this.bucket[user.login_id])
     return { statusCode }
   }
 
   @UseGuards(WebSocketGuard)
   @SubscribeMessage('createChat')
   async create(@MessageBody() createChatDto: CreateChatDto, @Request() req: any,) {
-    console.log(createChatDto.username)
     const { message, receipient, ...rest } = await this.chatsService.create(createChatDto, req.user);
     const receiver = this.bucket[receipient]
     if (!receiver) {
@@ -58,7 +56,6 @@ export class ChatsGateway implements OnModuleInit, OnGatewayDisconnect {
       }
     }
     const receiver_socket = this.server.to(receiver)
-    console.log(req.user.login_id)
     receiver_socket.emit('private-message', { message, sender: req.user.login_id })
     return rest
   }
@@ -72,10 +69,8 @@ export class ChatsGateway implements OnModuleInit, OnGatewayDisconnect {
   @UseGuards(WebSocketGuard)
   @SubscribeMessage('findOneChat')
   async findOne(@Request() req: any, @MessageBody() findOneChatDto: FindOneChatDto) {
-    console.log(findOneChatDto.username)
-    return this.chatsService.findOne(req.user, findOneChatDto)
+    return this.chatsService.findOne(req.user, findOneChatDto);
   }
-
   @SubscribeMessage('testing')
   async testing(@MessageBody() data: any, @MessageBody('id') id: number) {
     console.log(data)

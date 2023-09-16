@@ -15,7 +15,6 @@ export class ChatsService {
     try {
       const user = await this.usersService.findOne(payload.login_id)
       const receipient = await this.usersService.findOne(createChatDto.username)
-      console.log(receipient)
       if (!user || !receipient) {
         return {
           statusCode: 401,
@@ -47,12 +46,12 @@ export class ChatsService {
     const chats = await this.chatsRepo.find({ where: { user: { id: user.id } }, relations: ['receipient', 'user'] })
     var participants = []
     chats.forEach((chat) => {
-      delete chat.receipient.hashPassword
-      delete chat.user.hashPassword
+      delete chat.receipient.password_hash
+      delete chat.user.password_hash
       participants.push(chat.receipient)
       participants.push(chat.user)
     })
-    const uniqueReceipients = [...new Set(participants.map((participant) => participant.id).map((id) => participants.find((participant) => participant.id == id)))]
+    const uniqueReceipients = [...new Set(participants.map((participant) => participant.id).map((id) => participants.find((participant) => participant.id == id)))].filter((participant) => participant.id != user.id)
     if (!user) {
       return {
         statusCode: 401
@@ -70,7 +69,8 @@ export class ChatsService {
         { user: { login_id: findOneChatDto.username }, receipient: { login_id: payload.login_id } },
         { user: { login_id: payload.login_id }, receipient: { login_id: findOneChatDto.username } }
       ],
-      relations: ['receipient', 'user']
+      relations: ['receipient', 'user'],
+      order: { id: 'ASC' }
     })
     return chats
   }
