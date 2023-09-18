@@ -52,7 +52,8 @@ export class ChatsGateway implements OnModuleInit, OnGatewayDisconnect {
     const receiver = this.bucket[receipient]
     if (!receiver) {
       return {
-        statusCode: 400
+        statusCode: 400,
+        message: "Receiver not online"
       }
     }
     const receiver_socket = this.server.to(receiver)

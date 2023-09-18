@@ -15,17 +15,31 @@ export class ChatsService {
     try {
       const user = await this.usersService.findOne(payload.login_id)
       const receipient = await this.usersService.findOne(createChatDto.username)
+      let car: any
+      if (createChatDto.car) {
+        car = await this.carsService.findOne(createChatDto.car)
+      }
       if (!user || !receipient) {
         return {
           statusCode: 401,
           message: 'token invalid'
         }
       }
-      const chat = this.chatsRepo.create({
-        text: createChatDto.text,
-        user: user,
-        receipient: receipient
-      })
+      let chat: any
+      if (car) {
+        chat = this.chatsRepo.create({
+          text: createChatDto.text,
+          user: user,
+          receipient: receipient,
+          car: car
+        })
+      } else {
+        chat = this.chatsRepo.create({
+          text: createChatDto.text,
+          user: user,
+          receipient: receipient,
+        })
+      }
       await this.chatsRepo.save(chat)
       return {
         statusCode: 201,
@@ -69,9 +83,14 @@ export class ChatsService {
         { user: { login_id: findOneChatDto.username }, receipient: { login_id: payload.login_id } },
         { user: { login_id: payload.login_id }, receipient: { login_id: findOneChatDto.username } }
       ],
-      relations: ['receipient', 'user'],
+      relations: ['receipient', 'user', 'car'],
       order: { id: 'ASC' }
     })
+    chats.forEach(chat => {
+      delete chat.receipient.password_hash
+      delete chat.user.password_hash
+    })
+    console.log(chats)
     return chats
   }
 

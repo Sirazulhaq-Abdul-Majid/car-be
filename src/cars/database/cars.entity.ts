@@ -3,6 +3,7 @@ import { Condition, Transmission } from "../enum";
 import { Base } from "src/base/database/base.entity";
 import { Users } from "src/users/database/users.entity";
 import { Images } from "./images.entity";
+import { Chats } from "src/chats/database/chat.entity";
 
 @Entity('cars')
 export class Cars extends Base {
@@ -43,12 +44,16 @@ export class Cars extends Base {
   torque: number
 
   //relations
-  @ManyToOne(() => Users, users => users.cars)
-  users: Users
-
   @OneToMany(() => Images, images => images.cars)
   images: Images[]
 
+  @OneToMany(() => Chats, chats => chats.car)
+  chat: Chats[]
+
+  @ManyToOne(() => Users, users => users.cars)
+  users: Users
+
   @ManyToMany(() => Users, users => users.review)
   reviewers: Users
+
 }
