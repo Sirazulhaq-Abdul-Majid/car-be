@@ -58,7 +58,8 @@ export class CarsService {
 
   async sendOne(id: number) {
     try {
-      const car = await this.carsRepo.findOne({ where: { id }, relations: ['images'] })
+      const car = await this.carsRepo.findOne({ where: { id }, relations: ['images', 'users'] })
+      delete car.users.password_hash
       var base64Images = []
       car.images.forEach((image) => {
         const base64Image = image.image.toString('base64')
