@@ -1,43 +1,26 @@
 import { Escape } from "class-sanitizer"
 import { Transform, TransformFnParams } from "class-transformer"
-import { IsAlphanumeric, IsEmail, IsNotEmpty, IsString, MinLength } from "class-validator"
+import { IsAlphanumeric, IsNotEmpty, IsString, MinLength } from "class-validator"
 import * as sanitizeHtml from 'sanitize-html'
 
-export class SignupDTO {
-
-  @IsString()
-  @IsNotEmpty()
+export class ModifyUserDto {
   @Escape()
   @Transform((params: TransformFnParams) => sanitizeHtml(params.value))
   full_name: string
 
-  @IsEmail()
-  @IsNotEmpty()
   @Escape()
   @Transform((params: TransformFnParams) => sanitizeHtml(params.value))
-  email: string
+  password_hash: string
 
-  @MinLength(8)
-  @IsNotEmpty()
-  @Escape()
-  @Transform((params: TransformFnParams) => sanitizeHtml(params.value))
-  password: string
-
-  @IsAlphanumeric()
-  @IsNotEmpty()
   @Escape()
   @Transform((params: TransformFnParams) => sanitizeHtml(params.value))
   login_id: string
 
-  @IsNotEmpty()
   @Escape()
   @Transform((params: TransformFnParams) => sanitizeHtml(params.value))
-  @IsString()
   state: string
 
-  @IsNotEmpty()
   @Escape()
   @Transform((params: TransformFnParams) => sanitizeHtml(params.value))
-  @IsString()
   city: string
 }

@@ -1,8 +1,10 @@
-import { Body, Controller, Get, Post, Request, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Request, UseGuards } from '@nestjs/common';
 import { LocalGuard } from './guard/local.guard';
 import { AuthService } from './auth.service';
 import { LoginDto, RefreshDTO } from './dto';
 import { AccessTokenGuard } from './guard/access-token.guard';
+import { ForgetPasswordDTO } from './dto/forget-password.dto';
+import { ResetPasswordDTO } from './dto/reset-password.dto';
 
 @Controller('auth')
 export class AuthController {
@@ -30,5 +32,20 @@ export class AuthController {
   @Get('protected')
   hi() {
     return 'hi'
+  }
+
+  @Post('forget-password')
+  async forgetPassword(@Body() forgetPassword: ForgetPasswordDTO) {
+    return await this.authService.forgetPassword(forgetPassword)
+  }
+
+  @Get('check-otp/:id')
+  async checkOTP(@Param('id') id: number) {
+    return await this.authService.checkOTP(id)
+  }
+
+  @Post('reset-password')
+  async resetPassword(@Body() resetPassword: ResetPasswordDTO) {
+    return await this.authService.resetPassword(resetPassword)
   }
 }

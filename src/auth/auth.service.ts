@@ -1,4 +1,4 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { BadRequestException, Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UsersService } from 'src/users/users.service';
@@ -6,10 +6,14 @@ import { Auth } from './database/auth.entity';
 import { Repository } from 'typeorm';
 import * as bcrypt from 'bcrypt'
 import * as jwt from 'jsonwebtoken'
+import { ForgetPasswordDTO } from './dto/forget-password.dto';
+import { ForgetPassword } from './database/forget-password.entity';
+import { NodemailerService } from 'src/nodemailer/nodemailer.service';
+import { ResetPasswordDTO } from './dto/reset-password.dto';
 
 @Injectable()
 export class AuthService {
-  constructor(private userService: UsersService, private jwtService: JwtService, @InjectRepository(Auth) private authRepo: Repository<Auth>) { }
+  constructor(private userService: UsersService, private jwtService: JwtService, @InjectRepository(Auth) private authRepo: Repository<Auth>, @InjectRepository(ForgetPassword) private forgetPasswordRepo: Repository<ForgetPassword>, private readonly nodemailerService: NodemailerService) { }
 
   async signIn(username: string, password: string) {
     const user: any = await this.userService.findOne(username)
@@ -47,7 +51,6 @@ export class AuthService {
     } catch (error) {
       console.log(error)
     }
-
   }
 
   async validateUser(username: string, password: string) {
@@ -92,7 +95,7 @@ export class AuthService {
 
   async validateAccessToken(token: string) {
     try {
-      const decode = jwt.verify(token, "wk1JDuH4OsKWLHVXam9vfvUC5bZf974zEeHXmxSOGYAOU2AJCQVIj8B0ZeoGMPi8ylAc5jpKb85HdOzQ5rM6gdqdUl4ZGWXUPl3SvuLoLn4WU0iV3J3")
+      const decode = jwt.verify(token, process.env.JWT_ACCESS_SECRET)
       if (!decode) {
         return false
       }
@@ -108,6 +111,61 @@ export class AuthService {
     }
   }
 
+  async forgetPassword(forgetPassword: ForgetPasswordDTO) {
+    try {
+      const token = await this.generateRandomInt()
+      const user = await this.userService.findOneByEmail(forgetPassword.email)
+      if (!user) {
+        throw new BadRequestException('Email not found')
+      }
+      const forget = this.forgetPasswordRepo.create({
+        user: user,
+        token: token
+      })
+      try {
+        await this.forgetPasswordRepo.save(forget)
+      } catch (err) {
+        console.log(err)
+      }
+      await this.nodemailerService.sendForgetPasswordMail(token, user.email)
+      return {
+        statusCode: 200
+      }
+    } catch (err) {
+      console.log(err)
+    }
+  }
+
+  async resetPassword(resetPassword: ResetPasswordDTO) {
+    try {
+      const tokenExist = await this.forgetPasswordRepo.findOne({ where: { token: resetPassword.token }, relations: ['user'] })
+      const user = await this.userService.findOneByEmail(tokenExist.user.email)
+      const currentTimeStamp: any = Date.now();
+      const tokenTimeStamp: any = tokenExist.createdDate;
+      const diffInMinutes = Math.floor(
+        Math.abs(currentTimeStamp - tokenTimeStamp) / (1000 * 60)
+      );
+      if (!user || user.id !== tokenExist.user.id) {
+        throw new BadRequestException('')
+      }
+      if (diffInMinutes > 5) {
+        throw new BadRequestException('token timed out')
+      }
+      const hashedPassword = await this.hashPassword(resetPassword.password)
+      user['password_hash'] = hashedPassword
+      const updatedUser = await this.userService.update(user)
+      await this.forgetPasswordRepo.delete(tokenExist.id)
+      if (!updatedUser) {
+        throw new BadRequestException()
+      }
+      return {
+        statusCode: 200
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
   //worker functions
   async signJWT(payload: any) {
     const accessToken = await this.jwtService.signAsync(payload, {
@@ -119,5 +177,26 @@ export class AuthService {
       expiresIn: process.env.RTEXP
     })
     return { accessToken, refreshToken }
+  }
+
+  async generateRandomInt() {
+    return Number(Math.floor(Math.random() * 900000) + 100000);
+  }
+
+  async checkOTP(token: number) {
+    const tokenExist = await this.forgetPasswordRepo.findOne({ where: { token } })
+    if (!tokenExist) {
+      throw new BadRequestException('token invalid')
+    }
+    return {
+      statusCode: 200,
+      message: 'token valid'
+    }
+  }
+
+  async hashPassword(password: any) {
+    const salt = await bcrypt.genSalt();
+    const hash = await bcrypt.hash(password, salt);
+    return hash;
   }
 }

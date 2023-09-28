@@ -15,6 +15,10 @@ import { MulterModule } from '@nestjs/platform-express';
 import { Images } from './cars/database/images.entity';
 import { ChatsModule } from './chats/chats.module';
 import { Chats } from './chats/database/chat.entity';
+import { NodemailerModule } from './nodemailer/nodemailer.module';
+import { MailerModule } from '@nestjs-modules/mailer';
+import { VerifyEmail } from './auth/database/verify-email.entity';
+import { ForgetPassword } from './auth/database/forget-password.entity';
 
 @Module({
   imports: [
@@ -23,6 +27,16 @@ import { Chats } from './chats/database/chat.entity';
       isGlobal: true
     }),
     MulterModule.register({ limits: { fileSize: 1024 * 1024 } }),
+    MailerModule.forRoot({
+      transport: {
+        host: 'smtp.office365.com',
+        auth: {
+
+          user: process.env.MAIL_USER,
+          pass: process.env.MAIL_PASS
+        }
+      }
+    }),
     TypeOrmModule.forRoot({
       type: process.env.DB_DRIVER as any,
       host: process.env.DB_HOST,
@@ -31,11 +45,11 @@ import { Chats } from './chats/database/chat.entity';
       password: process.env.DB_PASSWORD,
       database: process.env.DB_NAME,
       entities: [
-        Users, Auth, Cars, Images, Chats
+        Users, Auth, Cars, Images, Chats, VerifyEmail, ForgetPassword
       ],
       synchronize: true,
     }),
-    BaseModule, UsersModule, AuthModule, CarsModule, ChatsModule],
+    BaseModule, UsersModule, AuthModule, CarsModule, ChatsModule, NodemailerModule],
   controllers: [AppController],
   providers: [AppService, UsersService],
 })

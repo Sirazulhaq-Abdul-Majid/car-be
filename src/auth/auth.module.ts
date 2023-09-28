@@ -9,9 +9,11 @@ import { JwtATStrategy } from './strategy/at.strategy';
 import { JwtRTStrategy } from './strategy/rt.strategy';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Auth } from './database/auth.entity';
+import { ForgetPassword } from './database/forget-password.entity';
+import { NodemailerModule } from 'src/nodemailer/nodemailer.module';
 
 @Module({
-  imports: [UsersModule, PassportModule, JwtModule.register({}), TypeOrmModule.forFeature([Auth])],
+  imports: [UsersModule, PassportModule, NodemailerModule, JwtModule.register({}), TypeOrmModule.forFeature([Auth, ForgetPassword])],
   providers: [AuthService, LocalStrategy, JwtATStrategy, JwtRTStrategy],
   controllers: [AuthController],
   exports: [AuthService]

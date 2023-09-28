@@ -90,7 +90,6 @@ export class ChatsService {
       delete chat.receipient.password_hash
       delete chat.user.password_hash
     })
-    console.log(chats)
     return chats
   }
 
