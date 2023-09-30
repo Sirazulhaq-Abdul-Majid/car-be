@@ -19,6 +19,7 @@ import { NodemailerModule } from './nodemailer/nodemailer.module';
 import { MailerModule } from '@nestjs-modules/mailer';
 import { VerifyEmail } from './auth/database/verify-email.entity';
 import { ForgetPassword } from './auth/database/forget-password.entity';
+import { SendgridAppModule } from './sendgrid/sendgrid.module';
 
 @Module({
   imports: [
@@ -49,7 +50,7 @@ import { ForgetPassword } from './auth/database/forget-password.entity';
       ],
       synchronize: true,
     }),
-    BaseModule, UsersModule, AuthModule, CarsModule, ChatsModule, NodemailerModule],
+    BaseModule, UsersModule, AuthModule, CarsModule, ChatsModule, NodemailerModule, SendgridAppModule],
   controllers: [AppController],
   providers: [AppService, UsersService],
 })
