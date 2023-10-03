@@ -1,9 +1,8 @@
-import { IsNotEmpty, IsNumberString, IsString, } from "class-validator"
+import { IsNotEmpty, IsNumber, IsNumberString, IsString, isNumber, } from "class-validator"
 import { Condition, Transmission } from "../enum"
 import { Escape } from "class-sanitizer"
 import { Transform, TransformFnParams } from "class-transformer"
 import * as sanitizeHtml from 'sanitize-html'
-import { ApiProperty } from "@nestjs/swagger"
 
 export class AddCarDTO {
   @IsString()
@@ -63,4 +62,9 @@ export class AddCarDTO {
   @Escape()
   @Transform((params: TransformFnParams) => sanitizeHtml(params.value))
   torque: number
+
+  @IsNumberString()
+  @Escape()
+  @Transform((params: TransformFnParams) => sanitizeHtml(params.value))
+  price: number
 }

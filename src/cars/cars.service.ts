@@ -19,7 +19,7 @@ export class CarsService {
     @InjectRepository(Cars) private carsRepo: Repository<Cars>,
     private userService: UsersService,
     @InjectRepository(Images) private imageRepo: Repository<Images>
-  ) {}
+  ) { }
 
   async saveCar(
     carDto: AddCarDTO,
@@ -37,6 +37,7 @@ export class CarsService {
         year: carDto.year,
         engine_cc: Number(carDto.engine_cc),
         horse_power: carDto.horse_power,
+        price: carDto.price,
         torque: carDto.torque,
         users: user,
         rating: Number(carDto.rating),

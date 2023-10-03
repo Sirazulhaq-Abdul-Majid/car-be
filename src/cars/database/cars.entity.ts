@@ -32,6 +32,9 @@ export class Cars extends Base {
   year: number
 
   @Column()
+  price: number
+
+  @Column()
   engine_cc: number
 
   @Column({ default: 0 })
