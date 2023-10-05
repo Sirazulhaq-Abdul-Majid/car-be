@@ -18,7 +18,7 @@ import { EditCarDto } from "./dto/edit-car.dto";
 
 @Controller("cars")
 export class CarsController {
-  constructor(private carsService: CarsService) {}
+  constructor(private carsService: CarsService) { }
 
   @UseGuards(AccessTokenGuard)
   @Post("save")

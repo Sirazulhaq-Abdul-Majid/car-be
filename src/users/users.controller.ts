@@ -23,6 +23,18 @@ export class UsersController {
     return this.userService.modifyUser(req.user, modifyUserDto)
   }
 
+  @UseGuards(AccessTokenGuard)
+  @Get('liked-id')
+  async likedId(@Request() req: any) {
+    return this.userService.likedId(req.user)
+  }
+
+  @UseGuards(AccessTokenGuard)
+  @Get('liked-object')
+  async likedObject(@Request() req: any) {
+    return this.userService.likedObject(req.user)
+  }
+
   @Get('test')
   test() {
     return this.userService.generateRandomInt()

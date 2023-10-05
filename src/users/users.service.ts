@@ -104,6 +104,21 @@ export class UsersService {
     }
   }
 
+  async likedId(user: any) {
+    const userLiked = await this.userRepo.findOne({ where: { id: user.id }, relations: ['review'] })
+    const liked = userLiked.review
+    const likesId = []
+    liked.forEach(like => {
+      likesId.push(like.id)
+    })
+    return likesId
+  }
+
+  async likedObject(user: any) {
+    const userLiked = await this.userRepo.findOne({ where: { id: user.id }, relations: ['review'] })
+    return userLiked.review
+  }
+
   //worker function
   async hashPassword(password: any) {
     const salt = await bcrypt.genSalt();
@@ -196,4 +211,5 @@ export class UsersService {
       console.log(error)
     }
   }
+
 }

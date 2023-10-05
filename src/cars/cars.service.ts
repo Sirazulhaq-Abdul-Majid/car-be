@@ -214,6 +214,11 @@ export class CarsService {
     }
   }
 
+  async idCarsLiked(payload: any) {
+    console.log(payload)
+    const user = await this.userService.findOneReview(payload.id)
+    return user
+  }
   //worker functions
   async findOne(id: number) {
     try {
