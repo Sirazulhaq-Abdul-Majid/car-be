@@ -38,6 +38,7 @@ export class CarsService {
         engine_cc: Number(carDto.engine_cc),
         horse_power: carDto.horse_power,
         price: carDto.price,
+        milage: carDto.milage,
         torque: carDto.torque,
         users: user,
         rating: Number(carDto.rating),
@@ -240,6 +241,9 @@ export class CarsService {
     if (carDto.brands) {
       query.where("cars.brands LIKE :brand", { brand: carDto.brands });
     }
+    if (carDto.type) {
+      query.where("cars.type LIKE :type", { type: carDto.type });
+    }
     if (carDto.model) {
       query.andWhere("cars.model LIKE :model", { model: `%${carDto.model}%` });
     }
@@ -267,8 +271,18 @@ export class CarsService {
       });
     }
     if (carDto.engine_cc_end) {
-      query.andWhere("cars.engine_cc >= :endCC", {
+      query.andWhere("cars.engine_cc <= :endCC", {
         endCC: carDto.engine_cc_end,
+      });
+    }
+    if (carDto.price_start) {
+      query.andWhere("cars.price>= :startPrice", {
+        startPrice: carDto.price_start,
+      });
+    }
+    if (carDto.price_end) {
+      query.andWhere("cars.price <= :endPrice", {
+        endPrice: carDto.price_end,
       });
     }
     if (carDto.horse_power_start) {
@@ -277,7 +291,7 @@ export class CarsService {
       });
     }
     if (carDto.horse_power_end) {
-      query.andWhere("cars.horse_power >= :endHP", {
+      query.andWhere("cars.horse_power <= :endHP", {
         endHP: carDto.horse_power_end,
       });
     }
@@ -287,7 +301,7 @@ export class CarsService {
       });
     }
     if (carDto.torque_end) {
-      query.andWhere("cars.torque >= :endTorque", {
+      query.andWhere("cars.torque <= :endTorque", {
         endTorque: carDto.torque_end,
       });
     }

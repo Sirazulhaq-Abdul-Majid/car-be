@@ -10,10 +10,11 @@ import { ForgetPasswordDTO } from './dto/forget-password.dto';
 import { ForgetPassword } from './database/forget-password.entity';
 import { NodemailerService } from 'src/nodemailer/nodemailer.service';
 import { ResetPasswordDTO } from './dto/reset-password.dto';
+import { SendgridService } from 'src/sendgrid/sendgrid.service';
 
 @Injectable()
 export class AuthService {
-  constructor(private userService: UsersService, private jwtService: JwtService, @InjectRepository(Auth) private authRepo: Repository<Auth>, @InjectRepository(ForgetPassword) private forgetPasswordRepo: Repository<ForgetPassword>, private readonly nodemailerService: NodemailerService) { }
+  constructor(private userService: UsersService, private jwtService: JwtService, @InjectRepository(Auth) private authRepo: Repository<Auth>, @InjectRepository(ForgetPassword) private forgetPasswordRepo: Repository<ForgetPassword>, private mailService: SendgridService) { }
 
   async signIn(username: string, password: string) {
     const user: any = await this.userService.findOne(username)
@@ -127,7 +128,7 @@ export class AuthService {
       } catch (err) {
         console.log(err)
       }
-      await this.nodemailerService.sendForgetPasswordMail(token, user.email)
+      await this.mailService.sendForgetPasswordMail(token, user.email)
       return {
         statusCode: 200
       }

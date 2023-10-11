@@ -67,4 +67,9 @@ export class AddCarDTO {
   @Escape()
   @Transform((params: TransformFnParams) => sanitizeHtml(params.value))
   price: number
+
+  @IsNumberString()
+  @Escape()
+  @Transform((params: TransformFnParams) => sanitizeHtml(params.value))
+  milage: number
 }

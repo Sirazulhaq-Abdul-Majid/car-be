@@ -7,5 +7,6 @@ import * as SendGrid from '@sendgrid/mail'
 @Module({
   controllers: [SendgridController],
   providers: [SendgridService],
+  exports: [SendgridService]
 })
 export class SendgridAppModule { }

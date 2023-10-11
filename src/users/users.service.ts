@@ -10,6 +10,7 @@ import { Repository } from "typeorm";
 import { ModifyUserDto, SignupDTO } from "./dto";
 import { VerifyEmail } from "src/auth/database/verify-email.entity";
 import { NodemailerService } from "src/nodemailer/nodemailer.service";
+import { SendgridService } from "src/sendgrid/sendgrid.service";
 
 @Injectable()
 export class UsersService {
@@ -17,7 +18,7 @@ export class UsersService {
     @InjectRepository(Users) private userRepo: Repository<Users>,
     @InjectRepository(VerifyEmail)
     private verifyEmailRepo: Repository<VerifyEmail>,
-    private mailService: NodemailerService
+    private mailService: SendgridService
   ) { }
 
   async signUp(signupDto: SignupDTO) {
@@ -54,28 +55,32 @@ export class UsersService {
   }
 
   async verifyEmail(email: string, otp: number) {
-    const user = await this.userRepo.findOne({ where: { email } });
-    const token = await this.verifyEmailRepo.findOne({
-      where: { token: otp },
-      relations: ["user"],
-    });
-    const currentTimeStamp: any = Date.now();
-    const tokenTimeStamp: any = token.createdDate;
-    const diffInMinutes = Math.floor(
-      Math.abs(currentTimeStamp - tokenTimeStamp) / (1000 * 60)
-    );
-    if (!user || user.role !== 1 || !token || token.user.email !== user.email) {
-      throw new BadRequestException();
+    try {
+      const user = await this.userRepo.findOne({ where: { email } });
+      const token = await this.verifyEmailRepo.findOne({
+        where: { token: otp },
+        relations: ["user"],
+      });
+      const currentTimeStamp: any = Date.now();
+      const tokenTimeStamp: any = token.createdDate;
+      const diffInMinutes = Math.floor(
+        Math.abs(currentTimeStamp - tokenTimeStamp) / (1000 * 60)
+      );
+      if (!user || user.role !== 1 || !token || token.user.email !== user.email) {
+        throw new BadRequestException();
+      }
+      if (diffInMinutes > 5) {
+        throw new BadRequestException('token timed out');
+      }
+      user.role = 2;
+      await this.userRepo.update(user.id, user);
+      await this.verifyEmailRepo.delete(token.id);
+      return {
+        statusCode: 200,
+      };
+    } catch (error) {
+      console.log(error)
     }
-    if (diffInMinutes > 5) {
-      throw new BadRequestException('token timed out');
-    }
-    user.role = 2;
-    await this.userRepo.update(user.id, user);
-    await this.verifyEmailRepo.delete(token.id);
-    return {
-      statusCode: 200,
-    };
   }
 
   async modifyUser(user: any, modifyUserDto: ModifyUserDto) {

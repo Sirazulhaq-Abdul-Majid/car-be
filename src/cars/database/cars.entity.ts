@@ -4,6 +4,7 @@ import { Base } from "src/base/database/base.entity";
 import { Users } from "src/users/database/users.entity";
 import { Images } from "./images.entity";
 import { Chats } from "src/chats/database/chat.entity";
+import { CarType } from "../enum/car-types.enum";
 
 @Entity('cars')
 export class Cars extends Base {
@@ -29,10 +30,16 @@ export class Cars extends Base {
   transmission: Transmission
 
   @Column()
+  type: CarType
+
+  @Column()
   year: number
 
   @Column()
   price: number
+
+  @Column()
+  milage: number
 
   @Column()
   engine_cc: number

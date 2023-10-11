@@ -19,6 +19,10 @@ export class SearchCarDTO {
 
   @Escape()
   @Transform((params: TransformFnParams) => sanitizeHtml(params.value))
+  type: Transmission
+
+  @Escape()
+  @Transform((params: TransformFnParams) => sanitizeHtml(params.value))
   year_start: number
   @Escape()
   @Transform((params: TransformFnParams) => sanitizeHtml(params.value))
@@ -44,6 +48,13 @@ export class SearchCarDTO {
   @Escape()
   @Transform((params: TransformFnParams) => sanitizeHtml(params.value))
   torque_end: number
+
+  @Escape()
+  @Transform((params: TransformFnParams) => sanitizeHtml(params.value))
+  price_start: number
+  @Escape()
+  @Transform((params: TransformFnParams) => sanitizeHtml(params.value))
+  price_end: number
 
   @Escape()
   @Transform((params: TransformFnParams) => sanitizeHtml(params.value))
