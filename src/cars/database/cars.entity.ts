@@ -39,7 +39,7 @@ export class Cars extends Base {
   price: number
 
   @Column()
-  milage: number
+  mileage: number
 
   @Column()
   engine_cc: number

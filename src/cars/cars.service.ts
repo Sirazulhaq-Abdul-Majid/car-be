@@ -38,7 +38,7 @@ export class CarsService {
         engine_cc: Number(carDto.engine_cc),
         horse_power: carDto.horse_power,
         price: carDto.price,
-        milage: carDto.milage,
+        mileage: carDto.milage,
         torque: carDto.torque,
         users: user,
         rating: Number(carDto.rating),
