@@ -48,8 +48,8 @@ export class ChatsGateway implements OnModuleInit, OnGatewayDisconnect {
   @UseGuards(WebSocketGuard)
   @SubscribeMessage('createChat')
   async create(@MessageBody() createChatDto: CreateChatDto, @Request() req: any,) {
-    const { message, receipient, ...rest } = await this.chatsService.create(createChatDto, req.user);
-    const receiver = this.bucket[receipient]
+    const { message, recipient, ...rest } = await this.chatsService.create(createChatDto, req.user);
+    const receiver = this.bucket[recipient]
     if (!receiver) {
       return {
         statusCode: 400,

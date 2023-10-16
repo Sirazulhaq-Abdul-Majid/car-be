@@ -57,7 +57,7 @@ export class Users extends Base {
   @OneToMany(() => Chats, chats => chats.user)
   chat: Chats[]
 
-  @OneToMany(() => Chats, chats => chats.receipient)
+  @OneToMany(() => Chats, chats => chats.recipient)
   received_text: Chats[]
 
   @ManyToMany(() => Cars, cars => cars.reviewers)

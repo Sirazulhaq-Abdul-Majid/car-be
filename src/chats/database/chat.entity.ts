@@ -19,5 +19,5 @@ export class Chats extends Base {
   user: Users
 
   @ManyToOne(() => Users, users => users.received_text)
-  receipient: Users
+  recipient: Users
 }

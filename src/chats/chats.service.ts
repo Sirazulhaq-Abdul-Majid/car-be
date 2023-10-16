@@ -14,12 +14,12 @@ export class ChatsService {
   async create(createChatDto: CreateChatDto, payload: any) {
     try {
       const user = await this.usersService.findOne(payload.login_id)
-      const receipient = await this.usersService.findOne(createChatDto.username)
+      const recipient = await this.usersService.findOne(createChatDto.username)
       let car: any
       if (createChatDto.car) {
         car = await this.carsService.findOne(createChatDto.car)
       }
-      if (!user || !receipient) {
+      if (!user || !recipient) {
         return {
           statusCode: 401,
           message: 'token invalid'
@@ -30,21 +30,21 @@ export class ChatsService {
         chat = this.chatsRepo.create({
           text: createChatDto.text,
           user: user,
-          receipient: receipient,
+          recipient: recipient,
           car: car
         })
       } else {
         chat = this.chatsRepo.create({
           text: createChatDto.text,
           user: user,
-          receipient: receipient,
+          recipient: recipient,
         })
       }
       await this.chatsRepo.save(chat)
       return {
         statusCode: 201,
         message: createChatDto.text,
-        receipient: receipient.login_id
+        recipient: recipient.login_id
       }
     } catch (error) {
       console.log(error)
@@ -57,37 +57,37 @@ export class ChatsService {
 
   async findAll(payload: any) {
     const user = await this.usersService.findOne(payload.login_id)
-    const chats = await this.chatsRepo.find({ where: { user: { id: user.id } }, relations: ['receipient', 'user'] })
+    const chats = await this.chatsRepo.find({ where: { user: { id: user.id } }, relations: ['recipient', 'user'] })
     var participants = []
     chats.forEach((chat) => {
-      delete chat.receipient.password_hash
+      delete chat.recipient.password_hash
       delete chat.user.password_hash
-      participants.push(chat.receipient)
+      participants.push(chat.recipient)
       participants.push(chat.user)
     })
-    const uniqueReceipients = [...new Set(participants.map((participant) => participant.id).map((id) => participants.find((participant) => participant.id == id)))].filter((participant) => participant.id != user.id)
+    const uniquerecipient = [...new Set(participants.map((participant) => participant.id).map((id) => participants.find((participant) => participant.id == id)))].filter((participant) => participant.id != user.id)
     if (!user) {
       return {
         statusCode: 401
       }
     }
-    if (!uniqueReceipients) {
+    if (!uniquerecipient) {
       throw new NotFoundException()
     }
-    return uniqueReceipients
+    return uniquerecipient
   }
 
   async findOne(payload: any, findOneChatDto: FindOneChatDto) {
     const chats = await this.chatsRepo.find({
       where: [
-        { user: { login_id: findOneChatDto.username }, receipient: { login_id: payload.login_id } },
-        { user: { login_id: payload.login_id }, receipient: { login_id: findOneChatDto.username } }
+        { user: { login_id: findOneChatDto.username }, recipient: { login_id: payload.login_id } },
+        { user: { login_id: payload.login_id }, recipient: { login_id: findOneChatDto.username } }
       ],
-      relations: ['receipient', 'user', 'car'],
+      relations: ['recipient', 'user', 'car'],
       order: { id: 'ASC' }
     })
     chats.forEach(chat => {
-      delete chat.receipient.password_hash
+      delete chat.recipient.password_hash
       delete chat.user.password_hash
     })
     return chats
