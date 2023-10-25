@@ -225,7 +225,7 @@ export class CarsService {
     try {
       const car = await this.carsRepo.findOne({
         where: { id },
-        relations: ["users"],
+        relations: ["images", "users"],
       });
       if (!car) {
         throw new BadRequestException();

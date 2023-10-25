@@ -83,7 +83,7 @@ export class ChatsService {
         { user: { login_id: findOneChatDto.username }, recipient: { login_id: payload.login_id } },
         { user: { login_id: payload.login_id }, recipient: { login_id: findOneChatDto.username } }
       ],
-      relations: ['recipient', 'user', 'car'],
+      relations: ['recipient', 'user', 'car', 'car.images'],
       order: { id: 'ASC' }
     })
     chats.forEach(chat => {
