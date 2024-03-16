@@ -9,7 +9,6 @@ import { Users } from "./database/users.entity";
 import { Repository } from "typeorm";
 import { ModifyUserDto, SignupDTO } from "./dto";
 import { VerifyEmail } from "src/auth/database/verify-email.entity";
-import { NodemailerService } from "src/nodemailer/nodemailer.service";
 import { SendgridService } from "src/sendgrid/sendgrid.service";
 
 @Injectable()
@@ -19,7 +18,7 @@ export class UsersService {
     @InjectRepository(VerifyEmail)
     private verifyEmailRepo: Repository<VerifyEmail>,
     private mailService: SendgridService
-  ) { }
+  ) {}
 
   async signUp(signupDto: SignupDTO) {
     try {
@@ -66,11 +65,16 @@ export class UsersService {
       const diffInMinutes = Math.floor(
         Math.abs(currentTimeStamp - tokenTimeStamp) / (1000 * 60)
       );
-      if (!user || user.role !== 1 || !token || token.user.email !== user.email) {
+      if (
+        !user ||
+        user.role !== 1 ||
+        !token ||
+        token.user.email !== user.email
+      ) {
         throw new BadRequestException();
       }
       if (diffInMinutes > 5) {
-        throw new BadRequestException('token timed out');
+        throw new BadRequestException("token timed out");
       }
       user.role = 2;
       await this.userRepo.update(user.id, user);
@@ -79,7 +83,7 @@ export class UsersService {
         statusCode: 200,
       };
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
   }
 
@@ -110,18 +114,24 @@ export class UsersService {
   }
 
   async likedId(user: any) {
-    const userLiked = await this.userRepo.findOne({ where: { id: user.id }, relations: ['review'] })
-    const liked = userLiked.review
-    const likesId = []
-    liked.forEach(like => {
-      likesId.push(like.id)
-    })
-    return likesId
+    const userLiked = await this.userRepo.findOne({
+      where: { id: user.id },
+      relations: ["review"],
+    });
+    const liked = userLiked.review;
+    const likesId = [];
+    liked.forEach((like) => {
+      likesId.push(like.id);
+    });
+    return likesId;
   }
 
   async likedObject(user: any) {
-    const userLiked = await this.userRepo.findOne({ where: { id: user.id }, relations: ['review'] })
-    return userLiked.review
+    const userLiked = await this.userRepo.findOne({
+      where: { id: user.id },
+      relations: ["review"],
+    });
+    return userLiked.review;
   }
 
   //worker function
@@ -207,14 +217,13 @@ export class UsersService {
 
   async update(user: Users) {
     try {
-      const updatedUser = await this.userRepo.update(user.id, user)
+      const updatedUser = await this.userRepo.update(user.id, user);
       if (!updatedUser) {
-        throw new BadRequestException()
+        throw new BadRequestException();
       }
-      return updatedUser
+      return updatedUser;
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
   }
-
 }

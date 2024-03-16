@@ -8,7 +8,6 @@ import * as bcrypt from 'bcrypt'
 import * as jwt from 'jsonwebtoken'
 import { ForgetPasswordDTO } from './dto/forget-password.dto';
 import { ForgetPassword } from './database/forget-password.entity';
-import { NodemailerService } from 'src/nodemailer/nodemailer.service';
 import { ResetPasswordDTO } from './dto/reset-password.dto';
 import { SendgridService } from 'src/sendgrid/sendgrid.service';
 

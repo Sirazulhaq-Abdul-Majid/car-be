@@ -67,6 +67,4 @@ export class Users extends Base {
     inverseJoinColumn: { name: 'cars_id', referencedColumnName: 'id' }
   })
   review: Cars[]
-
-
 }
